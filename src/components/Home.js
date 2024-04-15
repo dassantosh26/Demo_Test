@@ -4,6 +4,8 @@ import Education from "./Education";
 import Skill from "./Skill";
 import Project from "./Project";
 import Experience from "./Experience";
+import Product from "./Product";
+import AddProduct from "./AddProduct";
 const Home = () => {
   return (
     <HashRouter>
@@ -38,6 +40,14 @@ const Home = () => {
                 <i className="fa fa-user-tie mx-2"></i>
                 My Experience
               </Link>
+              <Link to={"/product"} className="btn btn-danger">
+                <i className="fa fa-warehouse mx-2"></i>
+                Product
+              </Link>
+              <Link to={"/addProduct"} className="btn btn-primary">
+                <i className="fa fa-cart-plus mx-2"></i>
+                Add Product
+              </Link>
             </div>
           </div>
         </div>
@@ -48,6 +58,8 @@ const Home = () => {
         <Route exact path="/skill" element={<Skill />} />
         <Route exact path="/project" element={<Project />} />
         <Route exact path="/experience" element={<Experience />} />
+        <Route exact path="/product" element={<Product />} />
+        <Route exact path="/addProduct" element={<AddProduct />} />
       </Routes>
     </HashRouter>
   );
