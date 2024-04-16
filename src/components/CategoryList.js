@@ -1,60 +1,58 @@
-import { useEffect, useState } from "react";
-import ReactPaginate from "react-paginate";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-const Product = () => {
-  const [productList, setProductList] = useState([]);
+import ReactPaginate from "react-paginate";
+const CategoryList = () => {
+  const [categoryList, setCategoryList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [keyword, setKeyword] = useState("");
 
-  const getProduct = () => {
-    fetch("https://cybotrix.com/webapi/brand/getall")
+  const getCategoryList = () => {
+    fetch("https://cybotrix.com/webapi/category/getall")
       .then((res) => res.json())
       .then((itemList) => {
-        setProductList(itemList);
+        setCategoryList(itemList);
         // console.log(itemList);
       });
   };
+  useEffect(() => {
+    getCategoryList();
+  }, []);
 
-  const deleteProduct = (brandid) => {
-    let url = "https://cybotrix.com/webapi/brand/deleteone";
-    let newbrand = { id: brandid };
-    let postdata = {
+  const deleteCategoryList = (catid) => {
+    const url = "https://cybotrix.com/webapi/category/deleteone";
+    const newCat = { id: catid }; // pass categoryid
+    const postData = {
       headers: { "content-type": "application/json" },
       method: "post",
-      body: JSON.stringify(newbrand),
+      body: JSON.stringify(newCat),
     };
-    fetch(url, postdata)
+    fetch(url, postData)
       .then((response) => response.text())
       .then((msg) => {
         alert(msg);
-        getProduct();
+        getCategoryList();
       });
   };
 
-  const editProduct = () => {
+  const editCategoryList = () => {
     console.log();
   };
-  useEffect(() => {
-    getProduct();
-  }, []);
-
   //pagination
   const PER_PAGE = 6;
   function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage);
   }
   const offset = currentPage * PER_PAGE;
-  const pageCount = Math.ceil(productList.length / PER_PAGE);
-
+  const pageCount = Math.ceil(categoryList.length / PER_PAGE);
   return (
-    <div className="container mb-5">
+    <div className="container mt-5">
       <div className="row">
         <div className="col-lg-4"></div>
-        <div className="col-lg-4 text-center mt-5 mb-5">
-          <h3>
-            <i className="fa fa-basket-shopping fa-lg text-primary mx-2 "></i>
-            My Products
-          </h3>
+        <div className="col-lg-4 mb-4">
+          <h1 className="text-info text-center">
+            <i className="fa fa-cubes mx-2"></i>CategoryList -{" "}
+            {categoryList.length}
+          </h1>
         </div>
         <div className="col-lg-4">
           <input
@@ -65,35 +63,56 @@ const Product = () => {
             value={keyword}
           />
         </div>
-        <div className="col-lg-1"></div>
-        <div className="col-lg-10">
-          <table className="table table-bordered text-center">
-            <thead>
+
+        <div className="col-lg-12">
+          <table className="table table-bordered text-center border-primary table-secondary table-hover table-striped">
+            <thead >
               <tr>
-                <th scope="col">Brand Id</th>
-                <th scope="col">Brand Name</th>
-                <th scope="col">Product Details</th>
-                <th scope="col">Action</th>
+                <th scope="col" className="text-primary">
+                  Category Id
+                </th>
+                <th scope="col" className="text-primary">
+                  Category Name
+                </th>
+                <th scope="col" className="text-primary">
+                  Category Details
+                </th>
+                <th scope="col" className="text-primary">
+                  Active Status
+                </th>
+                <th scope="col" className="text-primary">
+                  Category Url
+                </th>
+                <th scope="col" className="text-primary">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
-              {productList
+              {categoryList
                 .slice(offset, offset + PER_PAGE)
                 .map((item, index) => {
                   if (
-                    item.brandname.toLowerCase().match(keyword.toLowerCase()) ||
-                    item.details.toString().match(keyword)
+                    item.categoryname
+                      .toLowerCase()
+                      .match(keyword.toLowerCase()) ||
+                    item.categorydetails.toString().match(keyword) ||
+                    item.url.toString().match(keyword) ||
+                    item.active.toString().match(keyword)
                   )
                     return (
                       <tr key={index}>
-                        <td>{item.brandid}</td>
-                        <td>{item.brandname}</td>
-                        <td>{item.details}</td>
+                        <td>{item.catid}</td>
+                        <td>{item.categoryname}</td>
+                        <td>{item.categorydetails}</td>
+                        <td>{item.active === "" ? "No Data" : item.active}</td>
+                        <td>{item.url}</td>
+
                         <td>
-                          <Link to={"/addProduct"}>
+                          <Link to={"/addCategory"}>
                             <button
                               className="btn btn-warning mx-2 "
-                              onClick={editProduct.bind(this, item)}
+                              onClick={editCategoryList.bind(this, item)}
                             >
                               <i className="fa fa-pen-to-square"></i>
                             </button>
@@ -101,7 +120,7 @@ const Product = () => {
 
                           <button
                             className="btn btn-danger"
-                            onClick={deleteProduct.bind(this, item.brandid)}
+                            onClick={deleteCategoryList.bind(this, item.catid)}
                           >
                             <i className="fa fa-trash "></i>
                           </button>
@@ -139,4 +158,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default CategoryList;

@@ -6,6 +6,8 @@ import Project from "./Project";
 import Experience from "./Experience";
 import Product from "./Product";
 import AddProduct from "./AddProduct";
+import CategoryList from "./CategoryList";
+import AddCategory from "./AddCategory";
 const Home = () => {
   return (
     <HashRouter>
@@ -24,7 +26,7 @@ const Home = () => {
                 <i className="fa fa-gears mx-2"></i>
                 My Dashboard
               </Link>
-              <Link to={"/education"} className="btn btn-success">
+     {/*          <Link to={"/education"} className="btn btn-success">
                 <i className="fa fa-book mx-2"></i>
                 My Education
               </Link>
@@ -39,14 +41,22 @@ const Home = () => {
               <Link to={"/experience"} className="btn btn-secondary">
                 <i className="fa fa-user-tie mx-2"></i>
                 My Experience
-              </Link>
+              </Link> */}
               <Link to={"/product"} className="btn btn-danger">
                 <i className="fa fa-warehouse mx-2"></i>
                 Product
               </Link>
-              <Link to={"/addProduct"} className="btn btn-primary">
+              <Link to={"/addProduct"} className="btn btn-secondary">
                 <i className="fa fa-cart-plus mx-2"></i>
                 Add Product
+              </Link>
+              <Link to={"/category"} className="btn btn-info">
+                <i className="fa fa-cart-plus mx-2"></i>
+                CategoryList
+              </Link>
+              <Link to={"/addCategory"} className="btn btn-warning">
+                <i className="fa fa-plus mx-2"></i>
+                AddCategory
               </Link>
             </div>
           </div>
@@ -54,12 +64,14 @@ const Home = () => {
       </div>
       <Routes>
         <Route exact path="/" element={<Dashboard />} />
-        <Route exact path="/education" element={<Education />} />
+        {/* <Route exact path="/education" element={<Education />} />
         <Route exact path="/skill" element={<Skill />} />
         <Route exact path="/project" element={<Project />} />
-        <Route exact path="/experience" element={<Experience />} />
+        <Route exact path="/experience" element={<Experience />} /> */}
         <Route exact path="/product" element={<Product />} />
         <Route exact path="/addProduct" element={<AddProduct />} />
+        <Route exact path="/category" element={<CategoryList />} />
+        <Route exact path="/addCategory" element={<AddCategory />} />
       </Routes>
     </HashRouter>
   );
