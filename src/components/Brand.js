@@ -1,37 +1,43 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-
+import { Link } from "react-router-dom";
 const Brand = () => {
   const [brandList, setBrandList] = useState([]);
-  const [keyword, setKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+  const [keyword, setKeyword] = useState("");
 
-  const getBrandList = () => {
-    fetch("https://cybotrix.com/webapi/product/getall")
+  const getBrand = () => {
+    fetch("https://cybotrix.com/webapi/brand/getall")
       .then((res) => res.json())
       .then((itemList) => {
         setBrandList(itemList);
+        // console.log(itemList);
       });
   };
-  useEffect(() => {
-    getBrandList();
-  }, []);
 
-  const deleteProduct = (productid) => {
-    const url = "https://cybotrix.com/webapi/product/deleteone";
-    const newCat = { id: productid }; // pass productid
-    const postData = {
+  const deleteBrand = (brandid) => {
+    let url = "https://cybotrix.com/webapi/brand/deleteone";
+    let newbrand = { id: brandid };
+    let postdata = {
       headers: { "content-type": "application/json" },
       method: "post",
-      body: JSON.stringify(newCat),
+      body: JSON.stringify(newbrand),
     };
-    fetch(url, postData)
+    fetch(url, postdata)
       .then((response) => response.text())
       .then((msg) => {
         alert(msg);
-        getBrandList();
+        getBrand();
       });
   };
+
+  const editBrand = () => {
+    console.log();
+  };
+  useEffect(() => {
+    getBrand();
+  }, []);
+
   //pagination
   const PER_PAGE = 6;
   function handlePageClick({ selected: selectedPage }) {
@@ -39,14 +45,16 @@ const Brand = () => {
   }
   const offset = currentPage * PER_PAGE;
   const pageCount = Math.ceil(brandList.length / PER_PAGE);
+
   return (
-    <div className="container mt-5">
+    <div className="container mb-5">
       <div className="row">
         <div className="col-lg-4"></div>
-        <div className="col-lg-4 mb-4">
-          <h1 className="text-dark text-center">
-            <i className="fa fa-cubes mx-2"></i>BrandList
-          </h1>
+        <div className="col-lg-4 text-center mt-5 mb-5">
+          <h3>
+            <i className="fa fa-basket-shopping fa-lg text-primary mx-2 "></i>
+            My Brands
+          </h3>
         </div>
         <div className="col-lg-4">
           <input
@@ -57,48 +65,41 @@ const Brand = () => {
             value={keyword}
           />
         </div>
-        <div className="col-lg-12">
-          <table className="table table-bordered mt-3">
+        <div className="col-lg-1"></div>
+        <div className="col-lg-10">
+          <table className="table table-bordered text-center">
             <thead>
               <tr>
-                <th>Product Id</th>
-                <th>CategoryId</th>
-                <th>Brand Id</th>
-                <th>Product Name</th>
-                <th>Product Price</th>
-                <th>Product Quantity</th>
-                <th>Product Photo</th>
-                <th>Product Details</th>
-                <th>Product Url</th>
-                <th>Action</th>
+                <th scope="col">Brand Id</th>
+                <th scope="col">Brand Name</th>
+                <th scope="col">Brand Details</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
               {brandList.slice(offset, offset + PER_PAGE).map((item, index) => {
                 if (
-                  item.productname.toString().match(keyword) ||
-                  item.price.toString().match(keyword) ||
-                  item.quantity.toString().match(keyword) ||
-                  item.details.toString().match(keyword) ||
-                  item.url.toString().match(keyword)
+                  item.brandname.toLowerCase().match(keyword.toLowerCase()) ||
+                  item.details.toString().match(keyword)
                 )
                   return (
                     <tr key={index}>
-                      <td>{item.productid}</td>
-                      <td>{item.categoryid}</td>
                       <td>{item.brandid}</td>
-                      <td>{item.productname}</td>
-                      <td>{item.price}</td>
-                      <td>{item.quantity}</td>
-                      <td>
-                        <img src={item.photo} alt="pic" />
-                      </td>
+                      <td>{item.brandname}</td>
                       <td>{item.details}</td>
-                      <td>{item.url}</td>
                       <td>
+                        <Link to={"/addBrand"}>
+                          <button
+                            className="btn btn-warning mx-2 "
+                            onClick={editBrand.bind(this, item)}
+                          >
+                            <i className="fa fa-pen-to-square"></i>
+                          </button>
+                        </Link>
+
                         <button
                           className="btn btn-danger"
-                          onClick={deleteProduct.bind(this, item.productid)}
+                          onClick={deleteBrand.bind(this, item.brandid)}
                         >
                           <i className="fa fa-trash "></i>
                         </button>

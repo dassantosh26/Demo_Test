@@ -4,12 +4,12 @@ import Education from "./Education";
 import Skill from "./Skill";
 import Project from "./Project";
 import Experience from "./Experience";
-import Product from "./Product";
-import AddProduct from "./AddProduct";
-import CategoryList from "./CategoryList";
-import AddCategory from "./AddCategory";
 import Brand from "./Brand";
 import AddBrand from "./AddBrand";
+import CategoryList from "./CategoryList";
+import AddCategory from "./AddCategory";
+import Product from "./Product";
+import AddProduct from "./AddProduct";
 const Home = () => {
   return (
     <HashRouter>
@@ -44,29 +44,29 @@ const Home = () => {
                 <i className="fa fa-user-tie mx-2"></i>
                 My Experience
               </Link> */}
-              <Link to={"/product"} className="btn btn-danger">
+              <Link to={"/brand"} className="btn btn-danger">
                 <i className="fa fa-warehouse mx-2"></i>
-                Product
+                Brand
               </Link>
-              <Link to={"/addProduct"} className="btn btn-secondary">
+              <Link to={"/addBrand"} className="btn btn-secondary">
                 <i className="fa fa-cart-plus mx-2"></i>
-                Add Product
+                Add Brand
               </Link>
               <Link to={"/category"} className="btn btn-info">
                 <i className="fa fa-cart-plus mx-2"></i>
                 CategoryList
               </Link>
               <Link to={"/addCategory"} className="btn btn-warning">
-                <i className="fa fa-plus mx-2"></i>
+                <i className="fa fa-plus fa-2x mx-2"></i>
                 AddCategory
               </Link>
-              <Link to={"/brand"} className="btn btn-dark">
-                <i className="fa fa-plus mx-2"></i>
-                Brand
+              <Link to={"/product"} className="btn btn-dark">
+                <i className="fa fa-satellite mx-2"></i>
+                Product
               </Link>
-              <Link to={"/addBrand"} className="btn btn-success">
-                <i className="fa fa-plus mx-2"></i>
-                AddBrand
+              <Link to={"/addProduct"} className="btn btn-success">
+                <i className="fa fa-square-plus mx-2"></i>
+                Add Product
               </Link>
             </div>
           </div>
@@ -78,12 +78,12 @@ const Home = () => {
         <Route exact path="/skill" element={<Skill />} />
         <Route exact path="/project" element={<Project />} />
         <Route exact path="/experience" element={<Experience />} /> */}
-        <Route exact path="/product" element={<Product />} />
-        <Route exact path="/addProduct" element={<AddProduct />} />
-        <Route exact path="/category" element={<CategoryList />} />
-        <Route exact path="/addCategory" element={<AddCategory />} />
         <Route exact path="/brand" element={<Brand />} />
         <Route exact path="/addBrand" element={<AddBrand />} />
+        <Route exact path="/category" element={<CategoryList />} />
+        <Route exact path="/addCategory" element={<AddCategory />} />
+        <Route exact path="/product" element={<Product />} />
+        <Route exact path="/addProduct" element={<AddProduct />} />
       </Routes>
     </HashRouter>
   );

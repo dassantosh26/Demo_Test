@@ -1,43 +1,38 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import { Link } from "react-router-dom";
+
 const Product = () => {
   const [productList, setProductList] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
   const [keyword, setKeyword] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const getProduct = () => {
-    fetch("https://cybotrix.com/webapi/brand/getall")
+  const getproductList = () => {
+    fetch("https://cybotrix.com/webapi/product/getall")
       .then((res) => res.json())
       .then((itemList) => {
         setProductList(itemList);
-        // console.log(itemList);
       });
   };
+  useEffect(() => {
+    getproductList();
+  }, []);
 
-  const deleteProduct = (brandid) => {
-    let url = "https://cybotrix.com/webapi/brand/deleteone";
-    let newbrand = { id: brandid };
-    let postdata = {
+  const deleteProduct = (productid) => {
+    const url = "https://cybotrix.com/webapi/product/deleteone";
+    const newCat = { id: productid }; // pass productid
+    const postData = {
       headers: { "content-type": "application/json" },
       method: "post",
-      body: JSON.stringify(newbrand),
+      body: JSON.stringify(newCat),
     };
-    fetch(url, postdata)
+    fetch(url, postData)
       .then((response) => response.text())
       .then((msg) => {
         alert(msg);
-        getProduct();
+        getproductList();
       });
   };
-
-  const editProduct = () => {
-    console.log();
-  };
-  useEffect(() => {
-    getProduct();
-  }, []);
-
+  
   //pagination
   const PER_PAGE = 6;
   function handlePageClick({ selected: selectedPage }) {
@@ -45,16 +40,14 @@ const Product = () => {
   }
   const offset = currentPage * PER_PAGE;
   const pageCount = Math.ceil(productList.length / PER_PAGE);
-
   return (
-    <div className="container mb-5">
+    <div className="container mt-5">
       <div className="row">
         <div className="col-lg-4"></div>
-        <div className="col-lg-4 text-center mt-5 mb-5">
-          <h3>
-            <i className="fa fa-basket-shopping fa-lg text-primary mx-2 "></i>
-            My Products
-          </h3>
+        <div className="col-lg-4 mb-4">
+          <h1 className="text-dark text-center">
+            <i className="fa fa-cubes mx-2"></i>productList
+          </h1>
         </div>
         <div className="col-lg-4">
           <input
@@ -65,15 +58,20 @@ const Product = () => {
             value={keyword}
           />
         </div>
-        <div className="col-lg-1"></div>
-        <div className="col-lg-10">
-          <table className="table table-bordered text-center">
+        <div className="col-lg-12">
+          <table className="table table-bordered mt-3">
             <thead>
               <tr>
-                <th scope="col">Brand Id</th>
-                <th scope="col">Brand Name</th>
-                <th scope="col">Product Details</th>
-                <th scope="col">Action</th>
+                <th>Product Id</th>
+                <th>CategoryId</th>
+                <th>Brand Id</th>
+                <th>Product Name</th>
+                <th>Product Price</th>
+                <th>Product Quantity</th>
+                <th>Product Photo</th>
+                <th>Product Details</th>
+                <th>Product Url</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -81,27 +79,29 @@ const Product = () => {
                 .slice(offset, offset + PER_PAGE)
                 .map((item, index) => {
                   if (
-                    item.brandname.toLowerCase().match(keyword.toLowerCase()) ||
-                    item.details.toString().match(keyword)
+                    item.productname.toString().match(keyword) ||
+                    item.price.toString().match(keyword) ||
+                    item.quantity.toString().match(keyword) ||
+                    item.details.toString().match(keyword) ||
+                    item.url.toString().match(keyword)
                   )
                     return (
                       <tr key={index}>
+                        <td>{item.productid}</td>
+                        <td>{item.categoryid}</td>
                         <td>{item.brandid}</td>
-                        <td>{item.brandname}</td>
-                        <td>{item.details}</td>
+                        <td>{item.productname}</td>
+                        <td>{item.price}</td>
+                        <td>{item.quantity}</td>
                         <td>
-                          <Link to={"/addProduct"}>
-                            <button
-                              className="btn btn-warning mx-2 "
-                              onClick={editProduct.bind(this, item)}
-                            >
-                              <i className="fa fa-pen-to-square"></i>
-                            </button>
-                          </Link>
-
+                          <img src={item.photo} alt="pic" />
+                        </td>
+                        <td>{item.details}</td>
+                        <td>{item.url}</td>
+                        <td>
                           <button
                             className="btn btn-danger"
-                            onClick={deleteProduct.bind(this, item.brandid)}
+                            onClick={deleteProduct.bind(this, item.productid)}
                           >
                             <i className="fa fa-trash "></i>
                           </button>
