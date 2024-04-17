@@ -11,32 +11,45 @@ const AddProduct = () => {
   const [brandId, setBrandId] = useState("");
   const [catId, setCatId] = useState("");
   const saveProduct = () => {
-    const url = "https://cybotrix.com/webapi/product/save";
-    const newProduct = {
-      productname: name,
-      categoryid: catId,
-      brandid: brandId,
-      price: price,
-      quantity: quantity,
-      photo: photo,
-      details: details,
-    };
-    let postData = {
-      headers: { "content-type": "application/json" },
-      method: "post",
-      body: JSON.stringify(newProduct),
-    };
-    fetch(url, postData)
-      .then((response) => response.text())
-      .then((msg) => {
-        alert(msg);
-        setName("");
-        setPhoto("");
-        setPrice("");
-        setQuantity("");
-        setDetails("");
-      });
+    if (
+      name === "" ||
+      price === "" ||
+      quantity === "" ||
+      photo === "" ||
+      details === "" ||
+      brandId === "" ||
+      catId === ""
+    ) {
+      alert(`Please Enter Given Input Field`);
+    } else {
+      const url = "https://cybotrix.com/webapi/product/save";
+      const newProduct = {
+        productname: name,
+        categoryid: catId,
+        brandid: brandId,
+        price: price,
+        quantity: quantity,
+        photo: photo,
+        details: details,
+      };
+      let postData = {
+        headers: { "content-type": "application/json" },
+        method: "post",
+        body: JSON.stringify(newProduct),
+      };
+      fetch(url, postData)
+        .then((response) => response.text())
+        .then((msg) => {
+          alert(msg);
+          setName("");
+          setPhoto("");
+          setPrice("");
+          setQuantity("");
+          setDetails("");
+        });
+    }
   };
+
   const getBrand = () => {
     fetch("https://cybotrix.com/webapi/brand/getall")
       .then((res) => res.json())
