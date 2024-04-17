@@ -8,6 +8,8 @@ import Product from "./Product";
 import AddProduct from "./AddProduct";
 import CategoryList from "./CategoryList";
 import AddCategory from "./AddCategory";
+import Brand from "./Brand";
+import AddBrand from "./AddBrand";
 const Home = () => {
   return (
     <HashRouter>
@@ -26,7 +28,7 @@ const Home = () => {
                 <i className="fa fa-gears mx-2"></i>
                 My Dashboard
               </Link>
-     {/*          <Link to={"/education"} className="btn btn-success">
+              {/*          <Link to={"/education"} className="btn btn-success">
                 <i className="fa fa-book mx-2"></i>
                 My Education
               </Link>
@@ -58,6 +60,14 @@ const Home = () => {
                 <i className="fa fa-plus mx-2"></i>
                 AddCategory
               </Link>
+              <Link to={"/brand"} className="btn btn-dark">
+                <i className="fa fa-plus mx-2"></i>
+                Brand
+              </Link>
+              <Link to={"/addBrand"} className="btn btn-success">
+                <i className="fa fa-plus mx-2"></i>
+                AddBrand
+              </Link>
             </div>
           </div>
         </div>
@@ -72,6 +82,8 @@ const Home = () => {
         <Route exact path="/addProduct" element={<AddProduct />} />
         <Route exact path="/category" element={<CategoryList />} />
         <Route exact path="/addCategory" element={<AddCategory />} />
+        <Route exact path="/brand" element={<Brand />} />
+        <Route exact path="/addBrand" element={<AddBrand />} />
       </Routes>
     </HashRouter>
   );
