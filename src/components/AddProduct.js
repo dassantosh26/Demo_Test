@@ -66,6 +66,7 @@ const AddProduct = () => {
         // console.log(itemList);
       });
   };
+
   useEffect(() => {
     getBrand();
     getCategoryList();

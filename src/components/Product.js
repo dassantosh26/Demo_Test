@@ -5,6 +5,10 @@ const Product = () => {
   const [productList, setProductList] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+  const [categoryList, setCategoryList] = useState([]);
+  const [brandList, setBrandList] = useState([]);
+  const [bId, setBid] = useState("");
+  const [cId, setcid] = useState("");
 
   const getproductList = () => {
     fetch("https://cybotrix.com/webapi/product/getall")
@@ -13,9 +17,6 @@ const Product = () => {
         setProductList(itemList);
       });
   };
-  useEffect(() => {
-    getproductList();
-  }, []);
 
   const deleteProduct = (productid) => {
     const url = "https://cybotrix.com/webapi/product/deleteone";
@@ -32,7 +33,43 @@ const Product = () => {
         getproductList();
       });
   };
-  
+  const getCategoryList = () => {
+    fetch("https://cybotrix.com/webapi/category/getall")
+      .then((res) => res.json())
+      .then((itemList) => {
+        setCategoryList(itemList);
+        // console.log(itemList);
+      });
+  };
+  const getBrand = () => {
+    fetch("https://cybotrix.com/webapi/brand/getall")
+      .then((res) => res.json())
+      .then((itemList) => {
+        setBrandList(itemList);
+        // console.log(itemList);
+      });
+  };
+  const searchproduct = (categoryid = "", brandid = "") => {
+   
+    let url = "https://cybotrix.com/webapi/product/searchproduct";
+    let newcat = { categoryid: cId, brandid: bId }; // pass productid
+    let postdata = {
+      headers: { "content-type": "application/json" },
+      method: "post",
+      body: JSON.stringify(newcat),
+    };
+    fetch(url, postdata)
+      .then((response) => response.json())
+      .then((msg) => {
+        setProductList(msg);
+      });
+  };
+
+  useEffect(() => {
+    getproductList();
+    getCategoryList();
+    getBrand();
+  }, []);
   //pagination
   const PER_PAGE = 6;
   function handlePageClick({ selected: selectedPage }) {
@@ -43,21 +80,58 @@ const Product = () => {
   return (
     <div className="container mt-5">
       <div className="row">
-        <div className="col-lg-4"></div>
-        <div className="col-lg-4 mb-4">
+        <div className="col-lg-12 mb-4">
           <h1 className="text-dark text-center">
             <i className="fa fa-cubes mx-2"></i>productList
           </h1>
         </div>
-        <div className="col-lg-4">
+        <div className="col-lg-3 mb-3">
+          <div className="text-center mb-2">Search By Category</div>
+          <select
+            className="form-select"
+            onChange={(e) => setcid(e.target.value)}
+          >
+            <option>Search By Category...</option>
+            {categoryList.map((prod, index) => {
+              return (
+                <option key={index} value={prod.catid}>
+                  {prod.categoryname}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="col-lg-3 mb-3">
+          <div className="text-center mb-2">Search By Brand</div>
+          <select
+            className="form-select"
+            onChange={(e) => setBid(e.target.value)}
+          >
+            <option>Search By Brand...</option>
+            {brandList.map((prod, index) => {
+              return (
+                <option key={index} value={prod.brandid}>
+                  {prod.brandname}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="col-lg-2 mt-4">
+          <button className="mt-2 rounded-5" onClick={searchproduct}><i className="fa fa-magnifying-glass  px-3 "></i></button>
+          
+        </div>
+        <div className="col-lg-4 mb-3">
+          <div className="text-center mb-2">Search </div>
           <input
             type="text"
             className="form-control"
-            placeholder="Search...."
+            placeholder="Search ...."
             onChange={(e) => setKeyword(e.target.value)}
             value={keyword}
           />
         </div>
+
         <div className="col-lg-12">
           <table className="table table-bordered mt-3">
             <thead>
@@ -93,9 +167,7 @@ const Product = () => {
                         <td>{item.productname}</td>
                         <td>{item.price}</td>
                         <td>{item.quantity}</td>
-                        <td>
-                          <img src={item.photo} alt="pic" />
-                        </td>
+                        <td>{item.photo}</td>
                         <td>{item.details}</td>
                         <td>{item.url}</td>
                         <td>
