@@ -1,42 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
+import { ApiContext } from "../context/ApiContext";
 const Brand = () => {
-  const [brandList, setBrandList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [keyword, setKeyword] = useState("");
 
-  const getBrand = () => {
-    fetch("https://cybotrix.com/webapi/brand/getall")
-      .then((res) => res.json())
-      .then((itemList) => {
-        setBrandList(itemList);
-        // console.log(itemList);
-      });
-  };
-
-  const deleteBrand = (brandid) => {
-    let url = "https://cybotrix.com/webapi/brand/deleteone";
-    let newbrand = { id: brandid };
-    let postdata = {
-      headers: { "content-type": "application/json" },
-      method: "post",
-      body: JSON.stringify(newbrand),
-    };
-    fetch(url, postdata)
-      .then((response) => response.text())
-      .then((msg) => {
-        alert(msg);
-        getBrand();
-      });
-  };
-
+  const { brandList, deleteBrand } = useContext(ApiContext);
   const editBrand = () => {
     console.log();
   };
-  useEffect(() => {
-    getBrand();
-  }, []);
 
   //pagination
   const PER_PAGE = 6;

@@ -1,38 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { ApiContext } from "../context/ApiContext";
 const CategoryList = () => {
-  const [categoryList, setCategoryList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [keyword, setKeyword] = useState("");
-
-  const getCategoryList = () => {
-    fetch("https://cybotrix.com/webapi/category/getall")
-      .then((res) => res.json())
-      .then((itemList) => {
-        setCategoryList(itemList);
-        // console.log(itemList);
-      });
-  };
-  useEffect(() => {
-    getCategoryList();
-  }, []);
-
-  const deleteCategoryList = (catid) => {
-    const url = "https://cybotrix.com/webapi/category/deleteone";
-    const newCat = { id: catid }; // pass categoryid
-    const postData = {
-      headers: { "content-type": "application/json" },
-      method: "post",
-      body: JSON.stringify(newCat),
-    };
-    fetch(url, postData)
-      .then((response) => response.text())
-      .then((msg) => {
-        alert(msg);
-        getCategoryList();
-      });
-  };
+  const { getCategoryList, categoryList,deleteCategoryList } = useContext(ApiContext);
 
   const editCategoryList = () => {
     console.log();
@@ -66,7 +39,7 @@ const CategoryList = () => {
 
         <div className="col-lg-12">
           <table className="table table-bordered text-center border-primary table-secondary table-hover table-striped">
-            <thead >
+            <thead>
               <tr>
                 <th scope="col" className="text-primary">
                   Category Id

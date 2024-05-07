@@ -1,82 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import ReactPaginate from "react-paginate";
+import { ApiContext } from "../context/ApiContext";
 
 const Product = () => {
-  const [productList, setProductList] = useState([]);
   const [keyword, setKeyword] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
-  const [categoryList, setCategoryList] = useState([]);
-  const [brandList, setBrandList] = useState([]);
+
   const [bId, setBid] = useState("");
   const [cId, setcid] = useState("");
 
-  const getproductList = () => {
-    fetch("https://cybotrix.com/webapi/product/getall")
-      .then((res) => res.json())
-      .then((itemList) => {
-        setProductList(itemList);
-      });
-  };
+  const {
+    categoryList,
+    brandList,
+    getproductList,
+    deleteProduct,
+    searchproduct,
+    productList,
+  } = useContext(ApiContext);
 
-  const deleteProduct = (productid) => {
-    const url = "https://cybotrix.com/webapi/product/deleteone";
-    const newCat = { id: productid }; // pass productid
-    const postData = {
-      headers: { "content-type": "application/json" },
-      method: "post",
-      body: JSON.stringify(newCat),
-    };
-    fetch(url, postData)
-      .then((response) => response.text())
-      .then((msg) => {
-        alert(msg);
-        getproductList();
-      });
-  };
-  const getCategoryList = () => {
-    fetch("https://cybotrix.com/webapi/category/getall")
-      .then((res) => res.json())
-      .then((itemList) => {
-        setCategoryList(itemList);
-        // console.log(itemList);
-      });
-  };
-  const getBrand = () => {
-    fetch("https://cybotrix.com/webapi/brand/getall")
-      .then((res) => res.json())
-      .then((itemList) => {
-        setBrandList(itemList);
-        // console.log(itemList);
-      });
-  };
-  const searchproduct = (categoryid = "", brandid = "") => {
-   
-    let url = "https://cybotrix.com/webapi/product/searchproduct";
-    let newcat = { categoryid: cId, brandid: bId }; // pass productid
-    let postdata = {
-      headers: { "content-type": "application/json" },
-      method: "post",
-      body: JSON.stringify(newcat),
-    };
-    fetch(url, postdata)
-      .then((response) => response.json())
-      .then((msg) => {
-        setProductList(msg);
-      });
-  };
+  // searchproduct(cId, bId);
 
-  useEffect(() => {
-    getproductList();
-    getCategoryList();
-    getBrand();
-  }, []);
   //pagination
+  const [currentPage, setCurrentPage] = useState(0);
   const PER_PAGE = 6;
   function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage);
   }
   const offset = currentPage * PER_PAGE;
   const pageCount = Math.ceil(productList.length / PER_PAGE);
+
   return (
     <div className="container mt-5">
       <div className="row">
@@ -118,8 +69,9 @@ const Product = () => {
           </select>
         </div>
         <div className="col-lg-2 mt-4">
-          <button className="mt-2 rounded-5" onClick={searchproduct}><i className="fa fa-magnifying-glass  px-3 "></i></button>
-          
+          <button className="mt-2 rounded-5" onClick={searchproduct(cId, bId)}>
+            <i className="fa fa-magnifying-glass  px-3 "></i>
+          </button>
         </div>
         <div className="col-lg-4 mb-3">
           <div className="text-center mb-2">Search </div>

@@ -6,11 +6,15 @@ import "bootstrap/dist/js/bootstrap.bundle.js";
 import "bootstrap/dist/css/bootstrap.css";
 import "./icon/css/all.css";
 import reportWebVitals from "./reportWebVitals";
+import { ApiProvider } from "./context/ApiContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+
   <React.StrictMode>
-    <App />
+    <ApiProvider>
+      <App />
+      </ApiProvider>
   </React.StrictMode>
 );
 
