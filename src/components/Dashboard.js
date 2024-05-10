@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 
@@ -31,7 +33,9 @@ const Dashboard = () => {
             <i className="fa fa-copyright fa-4x mb-3 text-warning"></i>
             <h5 className="text-warning">
               Available Brand
-              <p className="text-danger mt-1"> {brandList.length} </p>
+              <p className="text-danger mt-1">
+                {isLoading ? "Loading" : brandList.length}{" "}
+              </p>
             </h5>
           </div>
         </div>
@@ -40,7 +44,9 @@ const Dashboard = () => {
             <i className="fa fa-list fa-4x mb-3 text-success"></i>
             <h5 className="text-success">
               Available Category
-              <p className="text-danger mt-1"> {categoryList.length}</p>
+              <p className="text-danger mt-1">
+                {isLoading ? "Loading" : categoryList.length}
+              </p>
             </h5>
           </div>
         </div>
@@ -49,7 +55,7 @@ const Dashboard = () => {
             <i className="fa fa-shop fa-4x mb-3 text-info"></i>
             <h5 className="text-info">
               Available Seller
-              <p className="text-danger mt-1"> Laoding ...</p>
+              <p className="text-danger mt-1"> Loading ...</p>
             </h5>
           </div>
         </div>
